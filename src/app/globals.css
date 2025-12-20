@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0F172A;
+  --foreground: #F8FAFC;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  line-height: 1.6;
+  font-size: 16px;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Accent and component variables */
+:root {
+  --accent-from: #7c3aed; /* violet-600 */
+  --accent-to: #06b6d4; /* teal-400 */
+  --accent-gradient: linear-gradient(135deg, var(--accent-from), var(--accent-to));
+}
+
+/* Site helpers for light and dark themes */
+.light {
+  --background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  --foreground: #0f172a;
+  --nav-bg: rgba(255,255,255,0.8);
+  --nav-border: rgba(15,23,42,0.06);
+  --card-bg: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(248,250,252,0.9));
+  --card-border: rgba(15,23,42,0.06);
+  --muted: #475569;
+  --btn-text: #0f172a;
+}
+
+.dark {
+  --background: #0F172A;
+  --foreground: #F8FAFC;
+  --nav-bg: rgba(15,23,42,0.6);
+  --nav-border: rgba(255,255,255,0.06);
+  --card-bg: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  --card-border: rgba(255,255,255,0.06);
+  --muted: #94a3b8;
+  --btn-text: #F8FAFC;
+}
+
+/* Utility classes that use the variables */
+.site-nav {
+  background: var(--nav-bg);
+  border: 1px solid var(--nav-border);
+}
+
+.site-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(12px);
+}
+
+.site-footer {
+  background: linear-gradient(180deg, rgba(0,0,0,0.02), transparent);
+}
+
+.text-gradient {
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-image: var(--accent-gradient);
+}
+
+/* Readability helpers and component buttons */
+.text-foreground { color: var(--foreground) !important; }
+.text-muted { color: var(--muted) !important; }
+.bg-card { background: var(--card-bg) !important; }
+.border-card { border: 1px solid var(--card-border) !important; }
+.btn-gradient { background-image: var(--accent-gradient); color: var(--btn-text) !important; }
+.btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.06); }
+
+.heading-large { font-weight: 900; letter-spacing: -0.02em; }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0F172A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Rounded corners */
+.rounded-t-2xl {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.rounded-b-2xl {
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+/* Additional custom styles */
+.min-h-screen {
+  min-height: 100vh;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - 1rem));
+  }
+}
+
+.animate-scroll {
+  animation: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
+}
