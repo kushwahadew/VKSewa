@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 
@@ -19,11 +20,11 @@ export default function Navbar() {
       <nav className="fixed top-6 inset-x-0 z-50 max-w-5xl mx-auto px-4">
           <div className="site-nav backdrop-blur-2xl rounded-3xl h-20 px-4 md:px-8 flex items-center justify-between shadow-2xl">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-400 to-emerald-600 flex items-center justify-center text-foreground font-black text-xl shadow-lg group-hover:scale-110 transition-transform duration-500">
-              VK
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-foreground font-black text-xl shadow-lg group-hover:scale-110 transition-transform duration-500">
+              <Image src="/logo.png" alt="VK SEWA Logo" width={48} height={48} />
             </div>
             <div className="hidden sm:flex flex-col">
-              <span className="font-black text-foreground tracking-tighter text-lg leading-none">VK SEVA</span>
+              <span className="font-black text-foreground text-lg leading-none">VK SEWA</span>
               <span className="text-[10px] text-muted font-bold tracking-[0.2em] uppercase">Foundation</span>
             </div>
           </Link>
@@ -62,10 +63,10 @@ export default function Navbar() {
             <div className="flex items-center justify-between mb-6">
               <Link href="/" className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-teal-400 to-emerald-600 flex items-center justify-center text-foreground font-black text-lg shadow-lg">
-                  VK
+                  <Image src="/logo.png" alt="VK SEWA Logo" width={40} height={40} />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-black text-foreground text-sm">VK SEVA</span>
+                  <span className="font-black text-foreground text-sm">VK SEWA</span>
                   <span className="text-[10px] text-gradient font-bold uppercase">Foundation</span>
                 </div>
               </Link>

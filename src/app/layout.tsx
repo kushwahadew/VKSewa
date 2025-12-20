@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "VK Seva Foundation",
-  description: "VK Seva Foundation • Empowering Communities, Building Futures",
+  title: "VK Sewa Foundation",
+  description: "VK Sewa Foundation • Empowering Communities, Building Futures",
 };
 
 export default function RootLayout({

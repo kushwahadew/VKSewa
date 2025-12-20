@@ -108,7 +108,7 @@ export default function AdminPage(){
   return (
     <div className="min-h-screen bg-[#0F172A] text-foreground p-8">
       <header className="max-w-6xl mx-auto mb-8 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Admin Panel • VK Seva Foundation</h1>
+        <h1 className="text-2xl font-bold">Admin Panel • VK Sewa Foundation</h1>
         <a href="/" className="text-gradient hover:underline">Back to site</a>
       </header>
       <main className="max-w-6xl mx-auto space-y-8">

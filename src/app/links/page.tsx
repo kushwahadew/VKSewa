@@ -10,7 +10,7 @@ export default function Links() {
           VK
         </div>
         <h1 className="text-4xl md:text-6xl font-black text-foreground mb-6 tracking-tighter">
-          VK Seva <span className="text-gradient">Connect</span>
+          VK Sewa <span className="text-gradient">Connect</span>
         </h1>
         <p className="text-xl text-muted max-w-md mx-auto leading-relaxed">
           Quick access to all our platforms, projects, and ways to support our mission.
@@ -43,7 +43,7 @@ export default function Links() {
 
         <div className="mt-24 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border-card text-muted text-xs font-black tracking-widest uppercase mb-8">
-            Powered by VK Seva Tech
+            Powered by VK Sewa Tech
           </div>
           <div className="flex justify-center gap-10">
             <a href="#" className="text-sm font-bold text-muted hover:text-gradient transition-colors">Privacy Policy</a>

@@ -32,7 +32,7 @@ export default function Home() {
 					<span className="text-gradient">Through Innovation</span>
 				</h1>
 				<p className="mt-4 max-w-3xl mx-auto" style={{ color: "var(--muted)", fontSize: "1.25rem", lineHeight: 1.6 }}>
-					VK Seva Foundation is a non-profit organization dedicated to bridging the gap between resources and rural needs through transparent, technology-driven social impact initiatives.
+					VK Sewa Foundation is a non-profit organization dedicated to bridging the gap between resources and rural needs through transparent, technology-driven social impact initiatives.
 				</p>
 				<div className="mt-10 flex flex-col md:flex-row gap-6 justify-center">
 					<button style={{ backgroundImage: "var(--accent-gradient)" }} className="px-10 py-5 btn-gradient font-black rounded-2xl shadow-2xl hover:opacity-95 transition-all duration-300 transform hover:-translate-y-1">
@@ -63,7 +63,7 @@ export default function Home() {
 						</h2>
 						<div className="space-y-6 text-muted text-lg leading-relaxed">
 							<p>
-								At VK Seva Foundation, we believe that every individual deserves access to basic necessities and opportunities for growth. Our journey started with a simple observation: the vast disparity in resources between urban and rural India.
+								At VK Sewa Foundation, we believe that every individual deserves access to basic necessities and opportunities for growth. Our journey started with a simple observation: the vast disparity in resources between urban and rural India.
 							</p>
 							<p>
 								We leverage modern technology to ensure that every rupee donated reaches its intended destination. Our transparent tracking systems and community-led approach make us a trusted partner for social change.

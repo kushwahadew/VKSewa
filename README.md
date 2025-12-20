@@ -1,4 +1,4 @@
-VK Seva Foundation — Next.js + Tailwind site replicating sibling card styles with an Admin panel and glassmorphism.
+VK Sewa Foundation — Next.js + Tailwind site replicating sibling card styles with an Admin panel and glassmorphism.
 
 ## Features
 - Card UI closely matches the Aryakarn sibling site with number badges, four highlight blocks, VISIT SITE button, and three login buttons.

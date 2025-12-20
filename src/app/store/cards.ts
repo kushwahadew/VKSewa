@@ -30,7 +30,7 @@ export type CardsState = {
 const DEFAULTS: Card[] = [
   {
     id: "1",
-    title: "VK SEVA NIDHI",
+    title: "VK SEWA NIDHI",
     subtitle: "Empowering rural communities through micro-finance and savings.",
     icon: "Shield",
     gradient: "from-teal-500 to-emerald-500",

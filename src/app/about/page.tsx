@@ -13,7 +13,7 @@ export default function About() {
           Driven by <span className="text-gradient">Compassion</span>
         </h1>
         <p className="text-xl md:text-2xl text-muted max-w-3xl mx-auto leading-relaxed">
-          VK Seva Foundation is more than just a non-profit; it's a movement dedicated to redefining social impact through the lens of technology and radical transparency.
+          VK Sewa Foundation is more than just a non-profit; it's a movement dedicated to redefining social impact through the lens of technology and radical transparency.
         </p>
       </header>
 
@@ -33,11 +33,11 @@ export default function About() {
           <div>
             <h2 className="text-4xl md:text-6xl font-black text-foreground mb-10 leading-tight">
               The Journey of <br />
-              <span className="text-gradient">VK Seva</span>
+              <span className="text-gradient">VK Sewa</span>
             </h2>
             <div className="space-y-8 text-muted text-lg leading-relaxed">
               <p>
-                Founded in 2014, VK Seva Foundation emerged from a collective desire to address the systemic challenges faced by rural communities in India. What started as a small group of volunteers providing weekend literacy classes has grown into a multi-faceted organization impacting thousands of lives.
+                Founded in 2014, VK Sewa Foundation emerged from a collective desire to address the systemic challenges faced by rural communities in India. What started as a small group of volunteers providing weekend literacy classes has grown into a multi-faceted organization impacting thousands of lives.
               </p>
               <p>
                 We realized early on that traditional charity models often lacked accountability and long-term sustainability. This led us to integrate technology into our core operations, ensuring that every initiative is data-driven and every donation is traceable.

@@ -40,7 +40,7 @@ export default function Projects() {
               image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2022&auto=format&fit=crop"
             },
             {
-              title: "Swasthya Seva",
+              title: "Swasthya Sewa",
               category: "Healthcare",
               desc: "Mobile health clinics providing free checkups and medicines to remote villages where medical facilities are scarce. Our clinics operate 24/7 and have served over 20,000 patients in the last year.",
               impact: "20,000+ Patients",
