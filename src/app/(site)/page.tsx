@@ -6,15 +6,27 @@ import { InfiniteCards } from "@/app/components/InfiniteCards";
 import { useCardsStore } from "@/app/store/cards";
 
 export default function Home() {
-	const { cards, seedIfEmpty } = useCardsStore();
+	const { cards, fetchCards, loading, seedIfEmpty } = useCardsStore();
 
 	useEffect(() => {
+		fetchCards();
 		seedIfEmpty();
-	}, [seedIfEmpty]);
+	}, [fetchCards, seedIfEmpty]);
 
 	const active = [...cards]
 		.filter((c) => c.active)
 		.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+	if (loading && cards.length === 0) {
+		return (
+			<div className="min-h-screen flex items-center justify-center bg-background">
+				<div className="flex flex-col items-center gap-6">
+					<div className="w-16 h-16 border-4 border-teal-500/20 border-t-teal-500 rounded-full animate-spin" />
+					<p className="text-muted font-bold animate-pulse text-sm uppercase tracking-widest">Waking up the database...</p>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="min-h-screen text-muted">

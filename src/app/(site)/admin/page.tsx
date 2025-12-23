@@ -145,7 +145,7 @@ function CardForm({ onSave, onCancel, initial }: { onSave: (card: Omit<Card, "id
 export default function AdminPage() {
   const { user, loading, isGateUnlocked, logout } = useAuth();
   const router = useRouter();
-  const { cards, addCard, updateCard, removeCard, toggleActive, move, seedIfEmpty } = useCardsStore();
+  const { cards, addCard, updateCard, removeCard, toggleActive, move, seedIfEmpty, fetchCards, loading: cardsLoading } = useCardsStore();
   const [editing, setEditing] = useState<Card | null>(null);
 
   if (!loading && !isGateUnlocked) {
@@ -158,11 +158,14 @@ export default function AdminPage() {
     }
   }, [user, loading, isGateUnlocked, router]);
 
-  useEffect(() => { seedIfEmpty(); }, [seedIfEmpty]);
+  useEffect(() => {
+    fetchCards();
+    seedIfEmpty();
+  }, [fetchCards, seedIfEmpty]);
 
   const ordered = useMemo(() => [...cards].sort((a, b) => (a.order || 0) - (b.order || 0)), [cards]);
 
-  if (loading || !isGateUnlocked) {
+  if (loading || cardsLoading || !isGateUnlocked) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-pulse text-xl font-bold text-muted">Loading Secure Environment...</div>

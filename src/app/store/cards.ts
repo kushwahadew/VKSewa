@@ -1,7 +1,5 @@
-"use client";
-
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { firestoreService } from "@/lib/firestoreService";
 
 export type Card = {
   id: string;
@@ -13,23 +11,23 @@ export type Card = {
   image?: string;
   active: boolean;
   order?: number;
-  badges?: string[]; // optional small highlight texts
+  badges?: string[];
 };
 
 export type CardsState = {
   cards: Card[];
-  setCards: (cards: Card[]) => void;
-  addCard: (card: Omit<Card, "id">) => void;
-  updateCard: (id: string, patch: Partial<Card>) => void;
-  removeCard: (id: string) => void;
-  toggleActive: (id: string) => void;
-  move: (id: string, direction: -1 | 1) => void;
-  seedIfEmpty: () => void;
+  loading: boolean;
+  fetchCards: () => Promise<void>;
+  addCard: (card: Omit<Card, "id">) => Promise<void>;
+  updateCard: (id: string, patch: Partial<Card>) => Promise<void>;
+  removeCard: (id: string) => Promise<void>;
+  toggleActive: (id: string) => Promise<void>;
+  move: (id: string, direction: -1 | 1) => Promise<void>;
+  seedIfEmpty: () => Promise<void>;
 };
 
-const DEFAULTS: Card[] = [
+const DEFAULTS: Omit<Card, "id">[] = [
   {
-    id: "1",
     title: "VK SEWA NIDHI",
     subtitle: "Empowering rural communities through micro-finance and savings.",
     icon: "Shield",
@@ -46,7 +44,6 @@ const DEFAULTS: Card[] = [
     ],
   },
   {
-    id: "2",
     title: "VK EDUCATION",
     subtitle: "Digital literacy and quality education for every child.",
     icon: "Briefcase",
@@ -63,7 +60,6 @@ const DEFAULTS: Card[] = [
     ],
   },
   {
-    id: "3",
     title: "VK HEALTHCARE",
     subtitle: "Bringing medical facilities to the doorstep of remote villages.",
     icon: "Shield",
@@ -79,7 +75,6 @@ const DEFAULTS: Card[] = [
     ],
   },
   {
-    id: "4",
     title: "VK AGRO TECH",
     subtitle: "Sustainable farming practices and market access for farmers.",
     icon: "Shield",
@@ -95,7 +90,6 @@ const DEFAULTS: Card[] = [
     ],
   },
   {
-    id: "5",
     title: "VK WOMEN EMPOWER",
     subtitle: "Self-help groups and vocational training for rural women.",
     icon: "Shield",
@@ -111,7 +105,6 @@ const DEFAULTS: Card[] = [
     ],
   },
   {
-    id: "6",
     title: "VK CLEAN WATER",
     subtitle: "Providing safe drinking water and sanitation facilities.",
     icon: "Shield",
@@ -128,45 +121,99 @@ const DEFAULTS: Card[] = [
   },
 ];
 
-export const useCardsStore = create<CardsState>()(
-  persist(
-    (set, get) => ({
-      cards: [],
-      setCards: (cards) => set({ cards }),
-      addCard: (card) =>
-        set((state) => ({
-          cards: [
-            ...state.cards,
-            { ...card, id: crypto.randomUUID(), order: state.cards.length + 1 },
-          ],
-        })),
-      updateCard: (id, patch) =>
-        set((state) => ({
-          cards: state.cards.map((c) => (c.id === id ? { ...c, ...patch } : c)),
-        })),
-      removeCard: (id) =>
-        set((state) => ({ cards: state.cards.filter((c) => c.id !== id) })),
-      toggleActive: (id) =>
-        set((state) => ({
-          cards: state.cards.map((c) => (c.id === id ? { ...c, active: !c.active } : c)),
-        })),
-      move: (id, direction) =>
-        set((state) => {
-          const list = [...state.cards].sort((a, b) => (a.order || 0) - (b.order || 0));
-          const idx = list.findIndex((c) => c.id === id);
-          if (idx < 0) return { cards: state.cards };
-          const swapIdx = idx + direction;
-          if (swapIdx < 0 || swapIdx >= list.length) return { cards: state.cards };
-          const a = list[idx];
-          const b = list[swapIdx];
-          [a.order, b.order] = [b.order, a.order];
-          return { cards: list };
-        }),
-      seedIfEmpty: () => {
-        const has = get().cards.length > 0;
-        if (!has) set({ cards: DEFAULTS });
-      },
-    }),
-    { name: "vkseva-cards" }
-  )
-);
+export const useCardsStore = create<CardsState>((set, get) => ({
+  cards: [],
+  loading: false,
+
+  fetchCards: async () => {
+    set({ loading: true });
+    try {
+      const cards = await firestoreService.getCards();
+      set({ cards, loading: false });
+    } catch (err) {
+      console.error("Fetch cards failed:", err);
+      set({ loading: false });
+    }
+  },
+
+  addCard: async (card) => {
+    try {
+      const id = await firestoreService.addCard({ ...card, order: get().cards.length + 1 });
+      const newCard = { ...card, id, order: get().cards.length + 1 };
+      set((state) => ({ cards: [...state.cards, newCard] }));
+    } catch (err) {
+      console.error("Add card failed:", err);
+    }
+  },
+
+  updateCard: async (id, patch) => {
+    try {
+      await firestoreService.updateCard(id, patch);
+      set((state) => ({
+        cards: state.cards.map((c) => (c.id === id ? { ...c, ...patch } : c)),
+      }));
+    } catch (err) {
+      console.error("Update card failed:", err);
+    }
+  },
+
+  removeCard: async (id) => {
+    try {
+      await firestoreService.deleteCard(id);
+      set((state) => ({ cards: state.cards.filter((c) => c.id !== id) }));
+    } catch (err) {
+      console.error("Remove card failed:", err);
+    }
+  },
+
+  toggleActive: async (id) => {
+    const card = get().cards.find(c => c.id === id);
+    if (!card) return;
+    try {
+      await firestoreService.updateCard(id, { active: !card.active });
+      set((state) => ({
+        cards: state.cards.map((c) => (c.id === id ? { ...c, active: !c.active } : c)),
+      }));
+    } catch (err) {
+      console.error("Toggle active failed:", err);
+    }
+  },
+
+  move: async (id, direction) => {
+    const list = [...get().cards].sort((a, b) => (a.order || 0) - (b.order || 0));
+    const idx = list.findIndex((c) => c.id === id);
+    if (idx < 0) return;
+    const swapIdx = idx + direction;
+    if (swapIdx < 0 || swapIdx >= list.length) return;
+
+    const a = list[idx];
+    const b = list[swapIdx];
+
+    // Swap orders
+    const oldAOrder = a.order;
+    a.order = b.order;
+    b.order = oldAOrder;
+
+    try {
+      await firestoreService.updateCard(a.id, { order: a.order });
+      await firestoreService.updateCard(b.id, { order: b.order });
+      set({ cards: list });
+    } catch (err) {
+      console.error("Move failed:", err);
+    }
+  },
+
+  seedIfEmpty: async () => {
+    const current = await firestoreService.getCards();
+    if (current.length === 0) {
+      console.log("Seeding Firestore with default cards...");
+      for (const item of DEFAULTS) {
+        await firestoreService.addCard(item);
+      }
+      const seeded = await firestoreService.getCards();
+      set({ cards: seeded });
+    } else {
+      set({ cards: current });
+    }
+  },
+}));
