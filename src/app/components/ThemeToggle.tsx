@@ -1,32 +1,25 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<string>(() => {
-    if (typeof window === "undefined") return "dark";
-    return (localStorage.getItem("theme") as string) || (document.documentElement.classList.contains("light") ? "light" : "dark");
-  });
+  const [mounted, setMounted] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
-    // apply theme on mount
-    if (theme === "light") {
-      document.documentElement.classList.add("light");
-      document.documentElement.classList.remove("dark");
-    } else {
-      document.documentElement.classList.remove("light");
-      document.documentElement.classList.add("dark");
-    }
-    try {
-      localStorage.setItem("theme", theme);
-    } catch (e) {}
-  }, [theme]);
+    setMounted(true);
+  }, []);
 
-  const toggle = () => setTheme((t) => (t === "light" ? "dark" : "light"));
+  if (!mounted) {
+    return (
+      <div className="px-3 py-2 w-[46px] h-[38px] rounded-lg border border-card" />
+    );
+  }
 
   return (
     <button
-      onClick={toggle}
+      onClick={toggleTheme}
       aria-label="Toggle theme"
       className="px-3 py-2 rounded-lg bg-transparent border border-card text-muted hover:bg-card hover:text-foreground transition"
     >

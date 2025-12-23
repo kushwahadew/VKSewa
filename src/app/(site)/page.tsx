@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect } from "react";
-import FeatureCard from "./components/FeatureCard";
-import { InfiniteCards } from "./components/InfiniteCards";
-import { useCardsStore } from "./store/cards";
+import FeatureCard from "@/app/components/FeatureCard";
+import { InfiniteCards } from "@/app/components/InfiniteCards";
+import { useCardsStore } from "@/app/store/cards";
 
 export default function Home() {
 	const { cards, seedIfEmpty } = useCardsStore();
@@ -19,7 +19,7 @@ export default function Home() {
 	return (
 		<div className="min-h-screen text-muted">
 			{/* Hero Section */}
-			<header className="pt-40 pb-20 text-center max-w-5xl mx-auto px-4">
+			<header className="pt-32 pb-20 text-center max-w-5xl mx-auto px-4">
 				<div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border-card text-foreground text-sm font-medium mb-8 animate-fade-in">
 					<span className="relative flex h-2 w-2">
 						<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>

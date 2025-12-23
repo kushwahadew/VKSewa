@@ -5,7 +5,7 @@ import React from "react";
 export default function Links() {
   return (
     <div className="min-h-screen text-muted">
-      <header className="pt-48 pb-16 text-center max-w-4xl mx-auto px-4">
+      <header className="pt-32 pb-16 text-center max-w-4xl mx-auto px-4">
         <div className="w-32 h-32 rounded-[2.5rem] bg-gradient-to-br from-teal-400 to-emerald-600 mx-auto mb-10 flex items-center justify-center text-foreground text-5xl font-black shadow-2xl transform hover:rotate-12 transition-transform duration-500">
           VK
         </div>

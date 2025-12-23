@@ -4,9 +4,29 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
+import SecretCodeModal from "./SecretCodeModal";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    // Prevent default navigation if we are in the "unlocking" phase or just counting clicks
+    // Actually, we probably want to allow navigation BUT also count clicks.
+    // If the user clicks 7 times rapidly, we show the modal.
+
+    setClickCount(prev => prev + 1);
+
+    // Reset count after 2 seconds of inactivity
+    setTimeout(() => setClickCount(0), 3000);
+
+    if (clickCount + 1 >= 7) {
+      e.preventDefault();
+      setShowAuthModal(true);
+      setClickCount(0);
+    }
+  };
 
   const navItems = [
     { name: "About", href: "/about" },
@@ -18,8 +38,8 @@ export default function Navbar() {
   return (
     <>
       <nav className="fixed top-6 inset-x-0 z-50 max-w-5xl mx-auto px-4">
-          <div className="site-nav backdrop-blur-2xl rounded-3xl h-20 px-4 md:px-8 flex items-center justify-between shadow-2xl">
-          <Link href="/" className="flex items-center gap-3 group">
+        <div className="site-nav backdrop-blur-2xl rounded-3xl h-20 px-4 md:px-8 flex items-center justify-between shadow-2xl">
+          <Link href="/" className="flex items-center gap-3 group" onClick={handleLogoClick}>
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-foreground font-black text-xl shadow-lg group-hover:scale-110 transition-transform duration-500">
               <Image src="/logo.png" alt="VK SEWA Logo" width={48} height={48} />
             </div>
@@ -89,6 +109,7 @@ export default function Navbar() {
           </div>
         </div>
       )}
+      <SecretCodeModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
     </>
   );
 }
