@@ -21,7 +21,7 @@ export default function Footer() {
             </p>
             <div className="text-sm text-muted">
               <div className="font-bold text-foreground mb-1">Registered Office</div>
-              <div>PRINCE KUNAL Chandrani Road, Kankarbagh, Sampatchak, Bihar, India, 800020</div>
+              <div> Chandrani Road, Kankarbagh, Sampatchak, Bihar, India, 800020</div>
               <div className="mt-2 text-xs">Registered name approved: VK SEWA FOUNDATION • Ref: SRNAB9647030</div>
             </div>
             <div className="flex gap-4">

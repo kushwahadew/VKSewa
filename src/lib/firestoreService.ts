@@ -12,6 +12,7 @@ import { db } from "./firebase";
 import { Card } from "@/app/store/cards";
 
 const CARDS_COLLECTION = "cards";
+const SETTINGS_COLLECTION = "settings";
 
 export const firestoreService = {
     // Get all cards
@@ -42,5 +43,25 @@ export const firestoreService = {
     async deleteCard(id: string) {
         const cardRef = doc(db, CARDS_COLLECTION, id);
         await deleteDoc(cardRef);
+    },
+
+    // --- Settings / CMS ---
+
+    // Get a specific settings document (e.g., 'hero', 'mission')
+    async getSettings<T>(id: string): Promise<T | null> {
+        const { getDoc } = await import("firebase/firestore");
+        const docRef = doc(db, SETTINGS_COLLECTION, id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            return docSnap.data() as T;
+        }
+        return null;
+    },
+
+    // Update settings
+    async updateSettings(id: string, data: any) {
+        const { setDoc } = await import("firebase/firestore");
+        const docRef = doc(db, SETTINGS_COLLECTION, id);
+        await setDoc(docRef, data, { merge: true });
     }
 };

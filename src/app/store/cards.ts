@@ -126,10 +126,37 @@ export const useCardsStore = create<CardsState>((set, get) => ({
   loading: false,
 
   fetchCards: async () => {
+    if (get().loading) return;
     set({ loading: true });
     try {
-      const cards = await firestoreService.getCards();
-      set({ cards, loading: false });
+      let cards = await firestoreService.getCards();
+
+      // Seed if empty
+      if (cards.length === 0) {
+        console.log("Seeding Firestore with default cards...");
+        for (const item of DEFAULTS) {
+          await firestoreService.addCard(item);
+        }
+        cards = await firestoreService.getCards();
+      }
+
+      // Detect and fix gaps
+      cards.sort((a, b) => (a.order || 0) - (b.order || 0));
+      let needsFix = false;
+      const fixed = [];
+      for (let i = 0; i < cards.length; i++) {
+        const c = cards[i];
+        const correctOrder = i + 1;
+        if (c.order !== correctOrder) {
+          needsFix = true;
+          await firestoreService.updateCard(c.id, { order: correctOrder });
+          fixed.push({ ...c, order: correctOrder });
+        } else {
+          fixed.push(c);
+        }
+      }
+
+      set({ cards: needsFix ? fixed : cards, loading: false });
     } catch (err) {
       console.error("Fetch cards failed:", err);
       set({ loading: false });
@@ -148,21 +175,43 @@ export const useCardsStore = create<CardsState>((set, get) => ({
 
   updateCard: async (id, patch) => {
     try {
-      await firestoreService.updateCard(id, patch);
+      const { id: _, ...data } = patch as any;
+      await firestoreService.updateCard(id, data);
       set((state) => ({
         cards: state.cards.map((c) => (c.id === id ? { ...c, ...patch } : c)),
       }));
     } catch (err) {
       console.error("Update card failed:", err);
+      alert("Failed to update card. Please check your connection.");
     }
   },
 
   removeCard: async (id) => {
     try {
+      console.log("Store: removing card", id);
       await firestoreService.deleteCard(id);
-      set((state) => ({ cards: state.cards.filter((c) => c.id !== id) }));
+
+      const remaining = get().cards
+        .filter((c) => c.id !== id)
+        .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+      const updated = [];
+      for (let i = 0; i < remaining.length; i++) {
+        const c = remaining[i];
+        const newOrder = i + 1;
+        if (c.order !== newOrder) {
+          await firestoreService.updateCard(c.id, { order: newOrder });
+          updated.push({ ...c, order: newOrder });
+        } else {
+          updated.push(c);
+        }
+      }
+
+      set({ cards: updated });
+      console.log("Store: card removed and re-indexed");
     } catch (err) {
       console.error("Remove card failed:", err);
+      alert("Failed to delete card. See console for details.");
     }
   },
 
@@ -197,23 +246,14 @@ export const useCardsStore = create<CardsState>((set, get) => ({
     try {
       await firestoreService.updateCard(a.id, { order: a.order });
       await firestoreService.updateCard(b.id, { order: b.order });
-      set({ cards: list });
+      set({ cards: [...list] });
     } catch (err) {
       console.error("Move failed:", err);
     }
   },
 
   seedIfEmpty: async () => {
-    const current = await firestoreService.getCards();
-    if (current.length === 0) {
-      console.log("Seeding Firestore with default cards...");
-      for (const item of DEFAULTS) {
-        await firestoreService.addCard(item);
-      }
-      const seeded = await firestoreService.getCards();
-      set({ cards: seeded });
-    } else {
-      set({ cards: current });
-    }
+    // Deprecated: seeding is now handled in fetchCards
+    await get().fetchCards();
   },
 }));

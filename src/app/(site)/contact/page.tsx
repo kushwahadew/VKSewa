@@ -1,20 +1,42 @@
 "use client";
 
-import React from "react";
-import { Mail, MapPin, Phone, Send, Heart } from "lucide-react";
+import React, { useEffect } from "react";
+import { Mail, MapPin, Phone, Send, Heart, Shield, Zap } from "lucide-react";
+import { useSettingsStore } from "@/app/store/settings";
+
+const iconMap: Record<string, any> = {
+  Mail, MapPin, Phone, Heart, Shield, Zap
+};
 
 export default function Contact() {
+  const { contact, fetchSettings, seedSettings, loading } = useSettingsStore();
+
+  useEffect(() => {
+    fetchSettings();
+    seedSettings();
+  }, [fetchSettings, seedSettings]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse text-xl font-bold text-muted uppercase tracking-widest">Waking up the database...</div>
+      </div>
+    );
+  }
+
+  const { hero, info, support } = contact;
+
   return (
     <div className="min-h-screen text-muted selection:bg-teal-500/30">
       <header className="pt-28 pb-12 text-center max-w-4xl mx-auto px-6">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-card border-card text-teal-500 text-[10px] font-black mb-6 tracking-widest uppercase animate-fade-in shadow-sm">
-          Get in Touch
+          {hero.badge}
         </div>
         <h1 className="text-4xl md:text-6xl font-black text-foreground leading-tight mb-4 tracking-tighter">
-          Let's <span className="text-gradient">Connect</span>
+          {hero.title.split(' ').map((word, i) => i === hero.title.split(' ').length - 1 ? <span key={i} className="text-gradient"> {word}</span> : word + ' ')}
         </h1>
         <p className="text-lg text-muted max-w-xl mx-auto leading-relaxed">
-          Questions or collaboration? We're here to help.
+          {hero.description}
         </p>
       </header>
 
@@ -28,41 +50,22 @@ export default function Contact() {
               <h2 className="text-2xl font-black text-foreground mb-8">Contact Info</h2>
 
               <div className="space-y-8">
-                {[
-                  {
-                    icon: <Mail className="w-5 h-5" />,
-                    label: "Email",
-                    value: "contact@vkseva.org",
-                    href: "mailto:contact@vkseva.org",
-                    color: "bg-teal-500/10 text-teal-500"
-                  },
-                  {
-                    icon: <MapPin className="w-5 h-5" />,
-                    label: "Office",
-                    value: "Kankarbagh, Bihar, 800020",
-                    href: "#",
-                    color: "bg-emerald-500/10 text-emerald-500"
-                  },
-                  {
-                    icon: <Phone className="w-5 h-5" />,
-                    label: "Phone",
-                    value: "+91 98765 43210",
-                    href: "tel:+919876543210",
-                    color: "bg-cyan-500/10 text-cyan-500"
-                  }
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-5 group/item">
-                    <div className={`w-11 h-11 rounded-xl ${item.color} flex items-center justify-center shrink-0 transition-transform group-hover/item:scale-110`}>
-                      {item.icon}
+                {info.map((item, i) => {
+                  const Icon = iconMap[item.icon] || Mail;
+                  return (
+                    <div key={i} className="flex items-center gap-5 group/item">
+                      <div className={`w-11 h-11 rounded-xl ${item.color} flex items-center justify-center shrink-0 transition-transform group-hover/item:scale-110`}>
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-muted font-black uppercase tracking-[0.2em] mb-0.5">{item.label}</p>
+                        <a href={item.href} className="text-lg text-foreground font-bold hover:text-teal-500 transition-colors">
+                          {item.value}
+                        </a>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-[10px] text-muted font-black uppercase tracking-[0.2em] mb-0.5">{item.label}</p>
-                      <a href={item.href} className="text-lg text-foreground font-bold hover:text-teal-500 transition-colors">
-                        {item.value}
-                      </a>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
@@ -71,11 +74,11 @@ export default function Contact() {
                 <div className="w-10 h-10 rounded-xl bg-teal-500 flex items-center justify-center text-white">
                   <Heart className="w-5 h-5 fill-current" />
                 </div>
-                <h3 className="text-xl font-black text-foreground">Support Our Cause</h3>
+                <h3 className="text-xl font-black text-foreground">{support.title}</h3>
               </div>
-              <p className="text-sm text-muted mb-8 leading-relaxed">Your contribution helps us bridge the gap for rural communities.</p>
+              <p className="text-sm text-muted mb-8 leading-relaxed">{support.description}</p>
               <button className="w-full py-4 btn-gradient text-white font-black rounded-2xl shadow-xl hover:shadow-2xl hover:scale-[1.01] transition-all">
-                DONATE NOW
+                {support.btnText}
               </button>
             </div>
           </div>

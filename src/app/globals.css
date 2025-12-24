@@ -155,16 +155,17 @@ body {
   min-height: 100vh;
 }
 
-@keyframes scroll {
+@keyframes scroll-slow {
   from {
     transform: translateX(0);
   }
 
   to {
-    transform: translateX(calc(-50% - 1rem));
+    transform: translateX(-50%);
   }
 }
 
-.animate-scroll {
-  animation: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
+.animate-scroll-slow {
+  display: inline-block;
+  animation: scroll-slow 40s linear infinite;
 }
